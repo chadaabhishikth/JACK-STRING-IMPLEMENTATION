@@ -55,3 +55,22 @@ class MyString {
         }
     }
 }
+class Main {
+    function void main() {
+        var MyString s;
+        var int result;
+
+        let s = MyString.new();
+
+        do s.appendChar(49); // '1'
+        do s.appendChar(50); // '2'
+        do s.appendChar(51); // '3'
+
+        let result = s.intValue();
+
+        do Output.printInt(result); // Expected: 123
+        do Output.println();
+
+        return;
+    }
+}
