@@ -1,4 +1,4 @@
-# JACK-STRING-IMPLEMENTATION
+# Jack-String-Implementation
 Implement the following String library functions in Jack:
 1. Sets the j'th character of this string to the given character.
 2. Appends the given character to the end of this string, and returns the string.
