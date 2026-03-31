@@ -1,0 +1,19 @@
+class Main {
+    function void main() {
+        var MyString s;
+        var int result;
+
+        let s = MyString.new(10);  // ✅ pass size
+
+        do s.appendChar(49); // '1'
+        do s.appendChar(50); // '2'
+        do s.appendChar(51); // '3'
+
+        let result = s.intValue();
+
+        do Output.printInt(result); // 123
+        do Output.println();
+
+        return;
+    }
+}
