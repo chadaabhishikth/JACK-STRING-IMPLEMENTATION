@@ -4,12 +4,19 @@ class MyString {
     field int maxLen;
     field Array str;
 
+    constructor MyString new(int size) {
+        let maxLen = size;
+        let length = 0;
+        let str = Array.new(size);
+        return this;
+    }
+
     method void setCharAt(int j, char c) {
         let str[j] = c;
         return;
     }
 
-    method String appendChar(char c) {
+    method MyString appendChar(char c) {
         if (length < maxLen) {
             let str[length] = c;
             let length = length + 1;
@@ -32,6 +39,7 @@ class MyString {
         let i = 0;
         let neg = false;
 
+        // check '-'
         if ((length > 0) & (str[0] = 45)) {
             let neg = true;
             let i = 1;
@@ -53,24 +61,5 @@ class MyString {
         } else {
             return val;
         }
-    }
-}
-class Main {
-    function void main() {
-        var MyString s;
-        var int result;
-
-        let s = MyString.new();
-
-        do s.appendChar(49); // '1'
-        do s.appendChar(50); // '2'
-        do s.appendChar(51); // '3'
-
-        let result = s.intValue();
-
-        do Output.printInt(result); // Expected: 123
-        do Output.println();
-
-        return;
     }
 }
