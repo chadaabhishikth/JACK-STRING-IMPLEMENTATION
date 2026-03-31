@@ -1,1 +1,49 @@
+method void setCharAt(int j, char c) {
+    let str[j] = c;
+    return;
+}
 
+method String appendChar(char c) {
+    if (length < maxLen) {
+        let str[length] = c;
+        let length = length + 1;
+    }
+    return this;
+}
+
+method void eraseLastChar() {
+    if (length > 0) {
+        let length = length - 1;
+    }
+    return;
+}
+
+method int intValue() {
+    var int val, i, d;
+    var boolean neg;
+
+    let val = 0;
+    let i = 0;
+    let neg = false;
+
+    if ((length > 0) & (str[0] = 45)) {
+        let neg = true;
+        let i = 1;
+    }
+
+    while (i < length) {
+        let d = str[i] - 48;
+        if ((d < 0) | (d > 9)) {
+            let i = length;
+        } else {
+            let val = (val * 10) + d;
+            let i = i + 1;
+        }
+    }
+
+    if (neg) {
+        return -val;
+    } else {
+        return val;
+    }
+}
