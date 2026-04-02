@@ -41,7 +41,7 @@ public class Assembler {
 
     public static void main(String[] args) throws Exception {
 
-        BufferedReader br = new BufferedReader(new FileReader("Prog.asm"));
+        BufferedReader br = new BufferedReader(new FileReader("fulltest.asm"));
         List<String> lines = new ArrayList<>();
 
         String line;
