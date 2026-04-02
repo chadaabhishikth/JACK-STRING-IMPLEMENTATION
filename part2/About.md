@@ -200,6 +200,3 @@ A fully functional assembler was developed that successfully converts Hack assem
 
 ---
 
-## 👨‍💻 Author
-
-Your Name
