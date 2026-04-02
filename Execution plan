@@ -1,41 +1,35 @@
-# Project: Jack String Library & Custom Assembler Pipeline
+### **Part 1: The Jack Implementation and Simulation**
 
-## 📌 Project Overview
-[cite_start]This repository contains the implementation for a three-part systems architecture project[cite: 3, 4, 6]. [cite_start]The objective is to build foundational OS-level string manipulation functions in Jack [cite: 9][cite_start], develop a custom general-purpose assembler [cite: 4][cite_start], and integrate the compiled machine code directly into simulated hardware[cite: 6, 7].
+**What the spec demands:**
+Write the Jack program for these tasks, compile it, and successfully simulate it on the VM Emulator.
 
----
+**The Veteran's Blueprint:**
+* **Write the Code:** You will be writing methods for a `String.jack` class. Under the hood, Jack strings are just arrays of characters in memory. You need to manipulate this array directly.
+* **Handle the Edge Cases:** For the integer conversion (`intValue`), make sure you handle negative signs at the beginning of the string, and ensure the loop correctly breaks the millisecond it hits a letter or symbol. For erasure and appending, you must track the current length versus the maximum capacity of the string so you don't cause a memory overflow.
+* **Simulation:** Use the provided Jack Compiler to generate `.vm` files. Load them into the VM Emulator, and write a small `Main.jack` test script that calls your four functions and prints the results to prove they work perfectly.
 
-## 🚀 Phase 1: String Library Implementation (Jack)
-[cite_start]**Objective:** Implement core string manipulation functions in the Jack programming language and verify them via simulation[cite: 3, 9].
+***
 
-### Tasks:
-- [ ] [cite_start]**Implement `String.setCharAt(j, c)`:** Set the *j*-th character of the string to the given character *c*[cite: 9].
-- [ ] [cite_start]**Implement `String.appendChar(c)`:** Append character *c* to the end of the string, handling length tracking, and return the updated string[cite: 9].
-- [ ] [cite_start]**Implement `String.eraseLastChar()`:** Erase the last character from the string and update the length pointer[cite: 9].
-- [ ] [cite_start]**Implement `String.intValue()`:** Parse the string and return its integer value, breaking the loop at the first non-numeric character[cite: 9].
-- [ ] [cite_start]**Compilation:** Compile the `String.jack` and a test `Main.jack` file using the standard Jack Compiler[cite: 3].
-- [ ] [cite_start]**Simulation:** Load the generated `.vm` files into the VM Emulator and successfully execute the test cases[cite: 3].
+### **Part 2: The Custom Assembler**
 
----
+**What the spec demands:**
+Write your own general-purpose assembler to convert Hack assembly code into 16-bit machine code. This must be developed entirely by you and cannot be the tool supplied with the book. You must also use the official Nand2tetris assembler for conversion.
 
-## ⚙️ Phase 2: Custom General-Purpose Assembler
-[cite_start]**Objective:** Write a custom assembler from scratch to translate Hack assembly language (`.asm`) into 16-bit machine code (`.hack`)[cite: 4].
+**The Veteran's Blueprint:**
+* **The Build:** You can write this assembler in any modern language (Python is usually the fastest for string parsing). Your program needs to read a `.asm` text file, strip out all whitespace and comments, and translate A-instructions (like `@100`) and C-instructions (like `D=D+A;JMP`) into strictly 16-bit binary strings.
+* **The Two-Pass Strategy:** Do not try to do this in one go.
+    1.  **Pass 1:** Scan the file just to record all label declarations (e.g., `(LOOP)`) and map them to their corresponding instruction line numbers in a symbol table (a dictionary/hash map).
+    2.  **Pass 2:** Go through the instructions again, translating the commands and replacing variables and labels with their actual numeric memory addresses from your symbol table.
+* **The Verification:** Run the same `.asm` files through your custom assembler and the official Nand2Tetris assembler. If the resulting binary `.hack` files are not bit-for-bit identical, you have a bug in your translation logic.
 
-[cite_start]*Note: This must be a custom-developed tool, entirely independent of the assembler supplied with the course materials[cite: 5].*
+***
 
-### Tasks:
-- [ ] [cite_start]**Parser Development:** Build a parser to strip whitespaces, ignore comments, and isolate raw instructions[cite: 4].
-- [ ] **Pass 1 (Symbol Resolution):** Scan the assembly code to identify all label declarations (e.g., `(LOOP)`) and store them in a Symbol Table with their corresponding instruction ROM addresses.
-- [ ] **Pass 2 (Translation):** - Translate A-instructions (`@value` or `@symbol`) into 16-bit binary.
-  - Translate C-instructions (`dest=comp;jump`) into their corresponding 16-bit binary operational codes.
-- [ ] [cite_start]**Verification:** Run test `.asm` files through both this custom assembler and the official Nand2tetris assembler[cite: 4]. Verify that the output `.hack` files match bit-for-bit.
+### **Part 3: Hardware Architecture and Execution**
 
----
+**What the spec demands:**
+Dump the machine codes generated by your custom assembler into `RAM.hdl`. Design the architecture to implement your machine instructions to get the result, specifically focusing on connecting the address and data buses during execution. The instructions presume you already have the HDL scripts for the CPU hardware.
 
-## 🛠️ Phase 3: Hardware Architecture Integration
-[cite_start]**Objective:** Load the generated machine code into memory and execute it on the CPU hardware architecture[cite: 6, 7].
-
-### Tasks:
-- [ ] [cite_start]**Memory Loading:** Dump the 16-bit machine code (`.hack` files) generated by the custom assembler directly into `RAM.hdl`[cite: 6].
-- [ ] [cite_start]**Bus Routing:** Design and verify the architecture connections[cite: 7]. [cite_start]Ensure that the address buses and data buses are correctly wired between the CPU, Instruction Memory, and Data Memory during execution[cite: 8].
-- [ ] [cite_start]**Execution:** Run the hardware simulator and verify that the CPU correctly fetches, decodes, and executes the instructions loaded in RAM[cite: 6, 8].
+**The Veteran's Blueprint:**
+* **Loading the Memory:** You will take the `.hack` binary file outputted by your assembler in Part 2 and load it into the hardware simulator. *(Note: While standard architecture usually puts instructions into a ROM chip, your specific instructions state to dump the codes into `RAM.hdl`. Follow this routing strictly).*
+* **Wiring the Architecture:** You are finalizing the top-level hardware integration. You need to ensure that the instruction output from your memory module is properly routed to the CPU's instruction pins. You must verify that the ALU outputs are routed back to the data memory, and the program counter (PC) is correctly addressing the next instruction cycle.
+* **The Ultimate Goal:** You need to prove that the high-level Jack code you wrote in Part 1, compiled down, and assembled with your custom tool from Part 2, actually executes correctly on the raw hardware logic gates you've wired together in Part 3.
