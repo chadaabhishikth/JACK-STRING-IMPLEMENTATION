@@ -45,12 +45,14 @@ public class Assembler {
         List<String> lines = new ArrayList<>();
 
         String line;
+
+        // Remove comments and blank lines
         while((line = br.readLine()) != null){
             line = line.split("//")[0].trim();
             if(!line.isEmpty()) lines.add(line);
         }
 
-        // PASS 1: Labels
+        // PASS 1: Handle labels
         int rom = 0;
         List<String> instructions = new ArrayList<>();
 
@@ -64,10 +66,12 @@ public class Assembler {
             }
         }
 
-        // PASS 2
+        // PASS 2: Translation
         int ram = 16;
+        PrintWriter out = new PrintWriter("output.hack");
 
         for(String l : instructions){
+
             if(l.startsWith("@")){
                 String sym = l.substring(1);
                 int val;
@@ -81,8 +85,9 @@ public class Assembler {
                     val = symbolTable.get(sym);
                 }
 
-                System.out.println(toBinary(val));
-            } else {
+                out.println(toBinary(val));
+            }
+            else {
                 String d="", c="", j="";
 
                 if(l.contains("=")){
@@ -90,6 +95,7 @@ public class Assembler {
                     d = parts[0];
                     l = parts[1];
                 }
+
                 if(l.contains(";")){
                     String[] parts = l.split(";");
                     c = parts[0];
@@ -98,8 +104,11 @@ public class Assembler {
                     c = l;
                 }
 
-                System.out.println("111" + comp.get(c) + dest.get(d) + jump.get(j));
+                out.println("111" + comp.get(c) + dest.get(d) + jump.get(j));
             }
         }
+
+        out.close();
+        System.out.println("Conversion completed! Output written to output.hack");
     }
 }
